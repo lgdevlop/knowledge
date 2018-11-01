@@ -1,0 +1,60 @@
+version: "2"
+
+services:
+  dbpostgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+
+  dbmongo:
+    image: mongo
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: 123456
+
+  # Versao Final do Projeto de Backend
+  vfbackend:
+    image: node:8-alpine
+    ports:
+      - "4001:4000"
+    volumes:
+      - ./versao-final/backend:/var/app
+    working_dir: /var/app
+    # Desenvolvimento
+    # command: sh -c "npm install && npm start"
+    # Producao
+    command: sh -c "npm install && node_modules/.bin/pm2 start --no-daemon index.js --name knowledge-backend"
+
+  # Versao Final do Projeto de Frontend
+  vffrontend:
+    image: node:8-alpine
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./versao-final/frontend:/var/app
+    working_dir: /var/app
+    command: sh -c "npm install && npm run serve -- --port 8080"
+
+  # Versao Inicial do Projeto de Frontend
+  vifrontend:
+    image: node:8-alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./versao-inicial/frontend:/var/app
+    working_dir: /var/app
+    command: sh -c "npm install && npm run serve -- --port 8080"
+
+  # Versao Inicial do Projeto de Backend
+  vibackend:
+    image: node:8-alpine
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./versao-inicial/backend:/var/app
+    working_dir: /var/app
+    # Desenvolvimento
+    command: sh -c "npm install && npm start"
+    # Producao
+    # command: sh -c "npm install && node_modules/.bin/pm2 start --no-daemon index.js --name knowledge-backend"
