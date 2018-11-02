@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon -L",
     "production": "pm2 start index.js --name knowledge-backend"
   },
   "keywords": [],
