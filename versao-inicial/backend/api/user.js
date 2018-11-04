@@ -54,6 +54,11 @@ module.exports = app => {
     }
   }
 
+  /**
+   * Obtem os dados dos usuários
+   * @param {import('http').IncomingMessage} req 
+   * @param {import('http').OutgoingMessage} res 
+   */
   const get = (req, res) => {
     app.db('users')
       .select('id', 'name', 'email', 'admin')
@@ -61,5 +66,19 @@ module.exports = app => {
       .catch(err => res.status(500).send(err))
   }
 
-  return { save, get };
+  /**
+   * Obtem os dados do usuário informado
+   * @param {import('http').IncomingMessage} req 
+   * @param {import('http').OutgoingMessage} res 
+   */
+  const getById = (req, res) => {
+    app.db('users')
+      .select('id', 'name', 'email', 'admin')
+      .where({ id: req.params.id })
+      .first()
+      .then(users => res.json(users))
+      .catch(err => res.status(500).send(err))
+  }
+
+  return { save, get, getById };
 };
